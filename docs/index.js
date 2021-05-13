@@ -44,48 +44,54 @@ function initTouch() {
     let lastX = 0;
     let lastY = 0;
 
-    draggableItemsContainer.addEventListener('touchstart', (e) => {        
-        initialX = e.touches[0].clientX;
-        initialY = e.touches[0].clientY;
-        e.target.classList.add('dragged');
+    draggableItemsContainer.addEventListener('touchstart', (e) => {
+        if (e.target.tagName == 'li') {
+            initialX = e.touches[0].clientX;
+            initialY = e.touches[0].clientY;
+            e.target.classList.add('dragged');
+        }        
     });
 
     draggableItemsContainer.addEventListener('touchmove', (e) => {
-        const x = e.touches[0].clientX - initialX;
-        const y = e.touches[0].clientY - initialY; 
-        lastX = e.touches[0].clientX;
-        lastY = e.touches[0].clientY;
-        e.target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'; 
-
-        const elementList = document.elementsFromPoint(lastX, lastY);
-        
-        if (elementList.length > 0) {
-            elementList.map(elem => {
-                if (!elem.classList.contains('dragover') && elem != e.target) {
-                    elem.classList.add('dragover');
-                }
-            });
+        if (e.target.tagName == 'li') {
+            const x = e.touches[0].clientX - initialX;
+            const y = e.touches[0].clientY - initialY; 
+            lastX = e.touches[0].clientX;
+            lastY = e.touches[0].clientY;
+            e.target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'; 
+    
+            const elementList = document.elementsFromPoint(lastX, lastY);
+            
+            if (elementList.length > 0) {
+                elementList.map(elem => {
+                    if (!elem.classList.contains('dragover') && elem != e.target) {
+                        elem.classList.add('dragover');
+                    }
+                });
+            }
+    
+            const dragoverElements = document.getElementsByClassName('dragover');
+    
+            if (dragoverElements.length > 0) {
+                dragoverElements.map(elem => {
+                    if (!elementList.includes(elem)) {
+                        elem.classList.remove('dragover');
+                    }
+                });
+            }  
         }
-
-        const dragoverElements = document.getElementsByClassName('dragover');
-
-        if (dragoverElements.length > 0) {
-            dragoverElements.map(elem => {
-                if (!elementList.includes(elem)) {
-                    elem.classList.remove('dragover');
-                }
-            });
-        }  
     });
 
     draggableItemsContainer.addEventListener('touchend', (e) => {
-        const elementList = document.elementsFromPoint(lastX, lastY)
-        if (elementList.length > 1 && elementList[1].hasAttribute('draggable')) {
-            // die swapItems Funktion wurde bereits in Aufgabe 1b von Ihnen erstellt
-            swapItems(e.target.dataset.index, elementList[1].dataset.index);
-        }        
-        e.target.style.transform = 'translate(0px, 0px)';
-        e.target.classList.remove('dragged');
+        if (e.target.tagName == 'li') {
+            const elementList = document.elementsFromPoint(lastX, lastY)
+            if (elementList.length > 1 && elementList[1].hasAttribute('draggable')) {
+                // die swapItems Funktion wurde bereits in Aufgabe 1b von Ihnen erstellt
+                swapItems(e.target.dataset.index, elementList[1].dataset.index);
+            }        
+            e.target.style.transform = 'translate(0px, 0px)';
+            e.target.classList.remove('dragged');
+        }
     });
 }
 
