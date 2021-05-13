@@ -47,6 +47,7 @@ function initTouch() {
     draggableItemsContainer.addEventListener('touchstart', (e) => {        
         initialX = e.touches[0].clientX;
         initialY = e.touches[0].clientY;
+        e.target.classList.add('dragged');
     });
 
     draggableItemsContainer.addEventListener('touchmove', (e) => {
@@ -55,6 +56,8 @@ function initTouch() {
         lastX = e.touches[0].clientX;
         lastY = e.touches[0].clientY;
         e.target.style.transform = "translate(" + x + "px, " + y + "px)"; 
+
+        const elementList = document.elementsFromPoint(lastX, lastY);
     });
 
     draggableItemsContainer.addEventListener('touchend', (e) => {
@@ -64,6 +67,7 @@ function initTouch() {
             swapItems(e.target.dataset.index, elementList[1].dataset.index);
         }        
         e.target.style.transform = "translate(0px, 0px)";
+        e.target.classList.remove('dragged');
     });
 }
 
