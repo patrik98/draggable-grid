@@ -58,21 +58,24 @@ function initTouch() {
         e.target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'; 
 
         const elementList = document.elementsFromPoint(lastX, lastY);
-        const dragoverElements = document.getElementsByClassName('dragover');
         
-        if (dragoverElements.length > 0) {
-            dragoverElements.map(elem => {
-                elem.classList.remove('dragover');
-            });
-        }
-
         if (elementList.length > 0) {
             elementList.map(elem => {
-                if (!elem.contains('dragover')) {
+                if (!elem.classList.contains('dragover') && elem != e.target) {
                     elem.classList.add('dragover');
                 }
             });
         }
+
+        const dragoverElements = document.getElementsByClassName('dragover');
+
+        if (dragoverElements.length > 0) {
+            dragoverElements.map(elem => {
+                if (!elementList.includes(elem)) {
+                    elem.classList.remove('dragover');
+                }
+            });
+        }  
     });
 
     draggableItemsContainer.addEventListener('touchend', (e) => {
