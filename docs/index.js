@@ -61,24 +61,27 @@ function initTouch() {
             e.target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'; 
     
             const elementList = document.elementsFromPoint(lastX, lastY);
-            
-            if (elementList.length > 0) {
-                const draggedOverElement = elementList[1];
+
+            // default elementList: [li.dragged, ul, body, html]
+            // we want this elementList: [li.dragged, li.dragover, ul, body, html] - length 5
+            if (elementList.length > 4) {
+                const draggedOverElement = elementList[1]; // this is the li.dragover element in the elementList at index 1
 
                 if (draggedOverElement.hasAttribute('draggable') && !draggedOverElement.classList.contains('dragover') && draggedOverElement != e.target) {
                     draggedOverElement.classList.add('dragover');
                 }
             }
-    
+            
             const dragoverElements = document.getElementsByClassName('dragover');
-    
+            
             if (dragoverElements.length > 0) {
-                dragoverElements.map(elem => {
+                Array.from(dragoverElements).map(elem => {
+                    // remove dragover class from all elments that have it, except for the current draggedOverElement
                     if (elementList.indexOf(elem) != 1) {
                         elem.classList.remove('dragover');
                     }
                 });
-            }  
+            }
         }
     });
 
@@ -91,6 +94,8 @@ function initTouch() {
             }        
             e.target.style.transform = 'translate(0px, 0px)';
             e.target.classList.remove('dragged');
+
+            // remove dragover class from all elements containing it
             elementList.map(elem => {
                 if (elem.hasAttribute('draggable')) {
                     elem.classList.remove('dragover');
@@ -135,6 +140,7 @@ function swapItems(index1, index2) {
     }
 }
 
+// use navigator object to get information about platform from user-agent header
 if (navigator.userAgent.match(/Android/i)
  || navigator.userAgent.match(/webOS/i)
  || navigator.userAgent.match(/iPhone/i)
