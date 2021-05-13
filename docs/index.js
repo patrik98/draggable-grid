@@ -63,18 +63,18 @@ function initTouch() {
             const elementList = document.elementsFromPoint(lastX, lastY);
             
             if (elementList.length > 0) {
-                elementList.map(elem => {
-                    if (!elem.classList.contains('dragover') && elem != e.target) {
-                        elem.classList.add('dragover');
-                    }
-                });
+                const draggedOverElement = elementList[1];
+
+                if (draggedOverElement.hasAttribute('draggable') && !draggedOverElement.classList.contains('dragover') && draggedOverElement != e.target) {
+                    draggedOverElement.classList.add('dragover');
+                }
             }
     
             const dragoverElements = document.getElementsByClassName('dragover');
     
             if (dragoverElements.length > 0) {
                 dragoverElements.map(elem => {
-                    if (!elementList.includes(elem)) {
+                    if (!elementList.includes(elementList[1])) {
                         elem.classList.remove('dragover');
                     }
                 });
@@ -91,6 +91,11 @@ function initTouch() {
             }        
             e.target.style.transform = 'translate(0px, 0px)';
             e.target.classList.remove('dragged');
+            elementList.map(elem => {
+                if (elem.hasAttribute('draggable')) {
+                    elem.classList.remove('dragover');
+                }
+            })
         }
     });
 }
