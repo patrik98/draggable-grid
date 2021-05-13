@@ -1,38 +1,42 @@
 const draggableItemsContainer = document.querySelector('ul');
 
-draggableItemsContainer.addEventListener('dragstart', (e) => {
-    e.target.classList.add('dragged');
-    e.dataTransfer.setData('text/plain', e.target.dataset.index);
-});
-
-draggableItemsContainer.addEventListener('dragend', (e) => {
-    e.target.classList.remove('dragged');
-});
-
-draggableItemsContainer.addEventListener('dragenter', (e) => {
-    // if (e.target.dataset && e.target.dataset.index) {
-    //     e.target.classList.add('dragover');
-    // }
-});
-
-draggableItemsContainer.addEventListener('dragleave', (e) => {
-    if (e.target.dataset && e.target.dataset.index) {
+// Drag events (for desktop)
+function initDragAndDrop() {
+    draggableItemsContainer.addEventListener('dragstart', (e) => {
+        e.target.classList.add('dragged');
+        e.dataTransfer.setData('text/plain', e.target.dataset.index);
+    });
+    
+    draggableItemsContainer.addEventListener('dragend', (e) => {
+        e.target.classList.remove('dragged');
+    });
+    
+    draggableItemsContainer.addEventListener('dragenter', (e) => {
+        // if (e.target.dataset && e.target.dataset.index) {
+        //     e.target.classList.add('dragover');
+        // }
+    });
+    
+    draggableItemsContainer.addEventListener('dragleave', (e) => {
+        if (e.target.dataset && e.target.dataset.index) {
+            e.target.classList.remove('dragover');
+        }
+    });
+    
+    draggableItemsContainer.addEventListener('dragover', (e) => {
+        e.preventDefault();
+    });
+    
+    draggableItemsContainer.addEventListener('drop', (e) => {
         e.target.classList.remove('dragover');
-    }
-});
-
-draggableItemsContainer.addEventListener('dragover', (e) => {
-    e.preventDefault();
-});
-
-draggableItemsContainer.addEventListener('drop', (e) => {
-    e.target.classList.remove('dragover');
-    const index1 = e.dataTransfer.getData('text/plain');
-    const index2 = e.target.dataset.index;
-
-    console.log(index1, index2);
-    swapItems(index1, index2);
-});
+        const index1 = e.dataTransfer.getData('text/plain');
+        const index2 = e.target.dataset.index;
+    
+        if (index1 && index2) {
+            swapItems(index1, index2);
+        }
+    });
+}
 
 function swapItems(index1, index2) {
     const elem1 = document.querySelector(`li[data-index='${index1}'`);
