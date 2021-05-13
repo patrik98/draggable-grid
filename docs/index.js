@@ -74,7 +74,7 @@ function initTouch() {
     
             if (dragoverElements.length > 0) {
                 dragoverElements.map(elem => {
-                    if (!elementList.includes(elementList[1])) {
+                    if (elementList.indexOf(elem) != 1) {
                         elem.classList.remove('dragover');
                     }
                 });
