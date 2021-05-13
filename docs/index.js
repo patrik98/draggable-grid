@@ -55,9 +55,24 @@ function initTouch() {
         const y = e.touches[0].clientY - initialY; 
         lastX = e.touches[0].clientX;
         lastY = e.touches[0].clientY;
-        e.target.style.transform = "translate(" + x + "px, " + y + "px)"; 
+        e.target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'; 
 
         const elementList = document.elementsFromPoint(lastX, lastY);
+        const dragoverElements = document.getElementsByClassName('dragover');
+        
+        if (dragoverElements.length > 0) {
+            dragoverElements.map(elem => {
+                elem.classList.remove('dragover');
+            });
+        }
+
+        if (elementList.length > 0) {
+            elementList.map(elem => {
+                if (!elem.contains('dragover')) {
+                    elem.classList.add('dragover');
+                }
+            });
+        }
     });
 
     draggableItemsContainer.addEventListener('touchend', (e) => {
@@ -66,7 +81,7 @@ function initTouch() {
             // die swapItems Funktion wurde bereits in Aufgabe 1b von Ihnen erstellt
             swapItems(e.target.dataset.index, elementList[1].dataset.index);
         }        
-        e.target.style.transform = "translate(0px, 0px)";
+        e.target.style.transform = 'translate(0px, 0px)';
         e.target.classList.remove('dragged');
     });
 }
