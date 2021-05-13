@@ -45,7 +45,7 @@ function initTouch() {
     let lastY = 0;
 
     draggableItemsContainer.addEventListener('touchstart', (e) => {
-        if (e.target.tagName == 'li') {
+        if (e.target.hasAttribute('draggable')) {
             initialX = e.touches[0].clientX;
             initialY = e.touches[0].clientY;
             e.target.classList.add('dragged');
@@ -53,7 +53,7 @@ function initTouch() {
     });
 
     draggableItemsContainer.addEventListener('touchmove', (e) => {
-        if (e.target.tagName == 'li') {
+        if (e.target.hasAttribute('draggable')) {
             const x = e.touches[0].clientX - initialX;
             const y = e.touches[0].clientY - initialY; 
             lastX = e.touches[0].clientX;
@@ -83,7 +83,7 @@ function initTouch() {
     });
 
     draggableItemsContainer.addEventListener('touchend', (e) => {
-        if (e.target.tagName == 'li') {
+        if (e.target.hasAttribute('draggable')) {
             const elementList = document.elementsFromPoint(lastX, lastY)
             if (elementList.length > 1 && elementList[1].hasAttribute('draggable')) {
                 // die swapItems Funktion wurde bereits in Aufgabe 1b von Ihnen erstellt
