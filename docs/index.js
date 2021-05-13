@@ -38,6 +38,35 @@ function initDragAndDrop() {
     });
 }
 
+function initTouch() {
+    let initialX = 0;
+    let initialY = 0;
+    let lastX = 0;
+    let lastY = 0;
+
+    draggableItemsContainer.addEventListener('touchstart', (e) => {        
+        initialX = e.touches[0].clientX;
+        initialY = e.touches[0].clientY;
+    });
+
+    draggableItemsContainer.addEventListener('touchmove', (e) => {
+        const x = e.touches[0].clientX - initialX;
+        const y = e.touches[0].clientY - initialY; 
+        lastX = e.touches[0].clientX;
+        lastY = e.touches[0].clientY;
+        e.target.style.transform = "translate(" + x + "px, " + y + "px)"; 
+    });
+
+    draggableItemsContainer.addEventListener('touchend', (e) => {
+        const elementList = document.elementsFromPoint(lastX, lastY)
+        if (elementList.length > 1 && elementList[1].hasAttribute('draggable')) {
+            // die swapItems Funktion wurde bereits in Aufgabe 1b von Ihnen erstellt
+            swapItems(e.target.dataset.index, elementList[1].dataset.index);
+        }        
+        e.target.style.transform = "translate(0px, 0px)";
+    });
+}
+
 function swapItems(index1, index2) {
     const elem1 = document.querySelector(`li[data-index='${index1}'`);
     const elem2 = document.querySelector(`li[data-index='${index2}'`);
@@ -72,3 +101,5 @@ function swapItems(index1, index2) {
         }
     }
 }
+
+initTouch();
